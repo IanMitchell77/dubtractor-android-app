@@ -2,13 +2,18 @@ package com.example.dubtractor;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -16,9 +21,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        haveNetworkConnection();
+        
+        //not sure if i need to enable javascript
 
         WebView myWebView = (WebView) findViewById(R.id.webview);
         myWebView.loadUrl("http://myradiostream.com/mobile/dubtractor");
+        // maybe i can link directly to the stream
+        
+        //message if nothing being broadcast
     }
 
 
@@ -57,5 +69,29 @@ public class MainActivity extends ActionBarActivity {
             return rootView;
         }
     }
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        ImageView icon = (ImageView) findViewById(R.id.imageView1);
 
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {           
+                    
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected()) {
+                	Log.v("MOBILE connectivity", "!");
+                	icon.setImageResource(R.drawable.mobile);
+                	haveConnectedMobile = true;
+                }
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected()) {
+                	Log.v("WIFI connectivity", "!");
+                	icon.setImageResource(R.drawable.wifi);
+                	haveConnectedWifi = true;
+                }    
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
 }
+

@@ -91,7 +91,6 @@ public class MainActivity extends ActionBarActivity {
                 	Log.v("MOBILE connectivity", "!");
                 	icon.setImageResource(R.drawable.mobile);
                 	haveConnectedMobile = true;
-                	Toast.makeText(this, "Mobile Internet Connection", Toast.LENGTH_SHORT).show();
                 }
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected()) {

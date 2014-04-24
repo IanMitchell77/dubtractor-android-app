@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,11 +26,17 @@ public class MainActivity extends ActionBarActivity {
         
         haveNetworkConnection();
         
-        //not sure if i need to enable javascript
-
         WebView myWebView = (WebView) findViewById(R.id.webview);
+        
+      //not sure if i need to enable javascript
+        myWebView.getSettings().setJavaScriptEnabled(true);
+        
+        myWebView.setVisibility(View.GONE);
+        
         myWebView.loadUrl("http://myradiostream.com/mobile/dubtractor");
         // maybe i can link directly to the stream
+        SystemClock.sleep(5000);
+        myWebView.loadUrl("javascript:html5player.play()");
         
         //message if nothing being broadcast
     }
@@ -83,6 +91,7 @@ public class MainActivity extends ActionBarActivity {
                 	Log.v("MOBILE connectivity", "!");
                 	icon.setImageResource(R.drawable.mobile);
                 	haveConnectedMobile = true;
+                	Toast.makeText(this, "Mobile Internet Connection", Toast.LENGTH_SHORT).show();
                 }
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
                 if (ni.isConnected()) {
